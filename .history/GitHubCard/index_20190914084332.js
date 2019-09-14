@@ -1,4 +1,3 @@
-//#region Instructions
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
@@ -8,7 +7,7 @@
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
    Skip to Step 3.
-   */
+*/
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -51,14 +50,12 @@
   luishrd
   bigknell
 */
-//#endregion Instructions
 
 const cards = document.querySelector('.cards');
 const me = appendSectionToCards('Me');
 const followers = appendSectionToCards('Followers');
 const following = appendSectionToCards('Following');
 
-//set local* = false to use live API data
 const localGitHub = false;
 const localFollowers = false;
 const localFollowing = false;
@@ -68,7 +65,6 @@ const mockFollowers = localFollowers ? followersData() : undefined;
 const mockFollowing = localFollowing ? followingData() : undefined;
 
 //fetching data
-
 const myGitHubPromise = fetchData(mockGitHubData, 'https://api.github.com/users/geedtd');
 console.log("myGitHubPromise:");
 console.log(myGitHubPromise);
@@ -81,6 +77,7 @@ const followingArray = fetchData(mockFollowing, 'https://api.github.com/users/ge
 console.log("followingArray:");
 console.log(followingArray);
 
+//appending cards to DOM
 appendCards(me, myGitHubPromise, 1);
 appendCards(followers, followersArray, 5);
 appendCards(following, followingArray, 5);
@@ -102,7 +99,7 @@ async function fetchData(localData, remoteDataSourceUri) {
 }
 
 function buildGitHubProfileCard(data) {
-  //creating elements
+  // Create Elements
   const card = document.createElement('div');
   const image = document.createElement('img');
   const cardInfo = document.createElement('div');
@@ -115,9 +112,10 @@ function buildGitHubProfileCard(data) {
   const following = document.createElement('p');
   const bio = document.createElement('p');
 
-  //setting content
+  //setting content 
+
   image.setAttribute('src', data.avatar_url);
-  fullName.textContent = data.name != null ? data.name : data.login; //name can apparently be null...
+  fullName.textContent = data.name != null ? data.name : data.login;
   userName.textContent = data.login;
   location.textContent = data.location != null ? `Location: ${data.location}` : null;
   profile.textContent = "Profile: ";
@@ -127,7 +125,8 @@ function buildGitHubProfileCard(data) {
   following.innerHTML = typeof data.following !== "undefined" ? `Following: <a href="${data.html_url}?tab=following">${data.following}</a>` : null;
   bio.textContent = data.bio != null ? `Bio: ${data.bio}` : null;
 
-  //creating structure
+  // creating structure
+
   card.appendChild(image);
   card.appendChild(cardInfo);
   cardInfo.appendChild(fullName);
@@ -139,7 +138,8 @@ function buildGitHubProfileCard(data) {
   cardInfo.appendChild(following);
   cardInfo.appendChild(bio);
 
-  //applying styles
+  //styling
+
   card.classList.add('card');
   fullName.classList.add('name');
   userName.classList.add('username');
@@ -169,12 +169,12 @@ function appendCards(target, data, count = 1, random = false) {
       
       if (localData) {
         console.log(`Building card using local data for ${currentLogin}`);
-        target.appendChild(buildGitHubProfileCard(currentData));
+        target.insertAdjacentElement("afterend", buildGitHubProfileCard(currentData));
       } else {
         console.log("Requests remaining: "+r.headers["x-ratelimit-remaining"]);
         console.log(`Building card using fetched data for ${currentLogin}`);
         axios.get('https://api.github.com/users/'+currentLogin).then((p) => {
-          target.appendChild(buildGitHubProfileCard(p.data));
+          target.insertAdjacentElement("afterend", buildGitHubProfileCard(p.data));
         });
       }
     })
@@ -183,7 +183,7 @@ function appendCards(target, data, count = 1, random = false) {
     });
   }
 
-}
+
 
 function randomNumberGenerator(min, max) {
   min = Math.ceil(min);
@@ -192,7 +192,7 @@ function randomNumberGenerator(min, max) {
 }
 
 
-//mock geedtd data, help channel posted about posting own data due to api usage limit
+//did mock data suggested in help channel do to limit on API usage
 function gitHubData() {
   return {
     data: {
@@ -239,6 +239,8 @@ function followersData() {
 
 function followingData() {
   return {
-    data: []
+    data: [
+
+    ]
   };
-}
+}}
